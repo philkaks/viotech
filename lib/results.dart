@@ -14,7 +14,7 @@ class ResultScreen extends StatelessWidget {
       String realPercentage =
           ((double.parse(percentageOfFight)) * 100).toStringAsFixed(2);
 
-      if (fight == 'true') {
+      if (fight == 'false') {
         return Text(
           'We are $realPercentage % sure that there is no violence in this video.',
           style: const TextStyle(

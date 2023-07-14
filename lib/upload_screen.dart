@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'testvsync.dart';
 class UploadScreen extends StatefulWidget {
   final String filePath;
 
-  UploadScreen({required this.filePath});
+  const UploadScreen({super.key, required this.filePath});
 
   @override
   _UploadScreenState createState() => _UploadScreenState();
@@ -54,22 +55,41 @@ class _UploadScreenState extends State<UploadScreen> {
         ),
       );
     }
+StreamController<List<int>> streamController =
+        StreamController<List<int>>.broadcast();
 
-    response.stream.listen(
+    streamController.stream.listen(
       (List<int> event) {
-        setState(() {
-          progress = response.contentLength != null
-              ? event.length / response.contentLength!
-              : 0;
-        });
+        if (response.contentLength != null) {
+          setState(() {
+            progress = event.length / response.contentLength!;
+          });
+        }
       },
-      onError: () {
+      onError: (error) {
         print('Error encountered while uploading please try again.');
       },
       onDone: () {
         print('Upload complete');
       },
     );
+
+    
+    // response.stream.listen(
+    //   (List<int> event) {
+    //     if (response.contentLength != null) {
+    //       setState(() {
+    //         progress = event.length / response.contentLength!;
+    //       });
+    //     }
+    //   },
+    //   onError: (error) {
+    //     print('Error encountered while uploading please try again.');
+    //   },
+    //   onDone: () {
+    //     print('Upload complete');
+    //   },
+    // );
   }
 
   @override
